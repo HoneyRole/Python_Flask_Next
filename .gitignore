@@ -109,10 +109,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-<<<<<<< HEAD
 .idea
-=======
->>>>>>> bab351babf93b76b1ddf24f50bbae808f17efe07
 
 # Spyder project settings
 .spyderproject
