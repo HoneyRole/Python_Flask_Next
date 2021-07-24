@@ -99,10 +99,8 @@ class DynamicSetup:
             self.public_routes[endpoint] = rule_url
 
     def spelunk(self):
-        for d in glob.glob("./routes/**/*", recursive=True):
+        for d in glob.glob("./routes/**/[!_]*", recursive=True):
             route_path = Path(d)
-            print(route_path)
-
             suffix = route_path.suffix.lower()
             if route_path.is_file() and suffix in [".html", ".py"]:
                 base_url = "/".join(route_path.parts[1:-1])
