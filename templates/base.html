@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body>
+{% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+        <section id="page_top" class="container">
+            {% for category, message in messages %}
+                <div class="flashed-message alert alert-{{ category if category not in ['temporary', 'message'] else 'info' }} flashed-message-{{ category }}"
+                     role="alert">
+                    <a href="#" title="close" class="close"
+                       aria-label="Close"
+                       aria-hidden="true">&times;</a>
+                    <span id="flash-message">{{ message }}</span>
+                </div>
+            {% endfor %}
+        </section>
+    {% endif %}
+{% endwith %}
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+{{ html | safe }}
+{% block body %}{% endblock %}
+
+</body>
+<script src="/static/js/base.js"></script>
+{% if environ.FLASK_ENV == 'development' %}
+    <script src="/static/js/auto_reload.js"></script>
+{% endif %}
+</html>

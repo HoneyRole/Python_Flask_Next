@@ -1,2 +1,5 @@
 Flask
 flask-login
+flask-sqlalchemy
+black
+flask-wtf
