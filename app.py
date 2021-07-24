@@ -7,24 +7,43 @@ from flask_wtf.csrf import CSRFProtect
 
 from flask_next import FlaskNext
 
-app = Flask(__name__)
-app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "debug")
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
-    "SQLALCHEMY_DATABASE_URI",
-    f"""sqlite:///{os.path.join(app.root_path, "test.db")}?check_same_thread=False""",
-)
-db = SQLAlchemy(app)
-CSRFProtect(app)
-login_manager = LoginManager(app)
-fn = FlaskNext(app)
-fn.print()
-login_manager.login_view = "routes.login"
-
-from models import User
+db = SQLAlchemy()
+csrf = CSRFProtect()
+fn = FlaskNext()
+login_manager = LoginManager()
 
 
-@login_manager.user_loader
-def load_user(user_id):
-    user = User.query.get(user_id)
-    g.user = user
-    return user
+def create_app():
+    """
+    create a flask app
+
+    :return:
+    """
+    _app = Flask(__name__)
+    _app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "debug")
+    _app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    _app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
+        "SQLALCHEMY_DATABASE_URI",
+        f"""sqlite:///{os.path.join(_app.root_path, "test.db")}?check_same_thread=False""",
+    )
+    fn.init_app(_app)
+    fn.print()
+    db.init_app(_app)
+    csrf.init_app(_app)
+    login_manager.init_app(_app)
+    login_manager.login_view = "routes.index.get_post_login"
+
+    from models import User
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        user = User.query.get(user_id)
+        g.user = user
+        return user
+
+    return _app
+
+
+if __name__ == "__main__":
+    app = create_app()
+    app.run()
