@@ -1,3 +1,5 @@
+import os
+
 import flask
 from flask_login import login_user
 
@@ -22,4 +24,4 @@ def get_post_login():
             return flask.redirect("/")
         flask.flash("user not found")
     flask.flash(",".join(error for error in form.errors))
-    return flask.render_template("login_page.html", form=form)
+    return flask.render_template("login_page.html", environ=os.environ, form=form)

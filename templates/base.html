@@ -3,33 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ title }}</title>
+
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
 </head>
 <body>
 {% with messages = get_flashed_messages(with_categories=True) %}
     {% if messages %}
         <section id="page_top" class="container">
             {% for category, message in messages %}
+                {% if message %}
                 <div class="flashed-message alert alert-{{ category if category not in ['temporary', 'message'] else 'info' }} flashed-message-{{ category }}"
                      role="alert">
                     <a href="#" title="close" class="close"
                        aria-label="Close"
                        aria-hidden="true">&times;</a>
-                    <span id="flash-message">{{ message }}</span>
+                    <span class="flash-message">{{ message }}</span>
                 </div>
+                {% endif %}
             {% endfor %}
         </section>
     {% endif %}
 {% endwith %}
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 <script>
-window.g_json = {{ g_json |  tojson }}
+    window.g_json =
+    {{ g_json or {} |  tojson }}
 </script>
 {{ html | safe }}
 {% block body %}{% endblock %}
 
 </body>
 <script src="/static/js/base.js"></script>
-{% if environ.FLASK_ENV == 'development' %}
+{% if environ and environ.FLASK_ENV == 'development' %}
     <script src="/static/js/auto_reload.js"></script>
 {% endif %}
 </html>
