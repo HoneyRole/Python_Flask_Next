@@ -34,6 +34,8 @@ function __interceptFetch(url, options) {
 
 window.fetch = __interceptFetch;
 
+// close flash message bootstrap messsages
+
 $("body").on("click", ".close", (evt) => {
     $(evt.currentTarget).parent().slideUp('slow');
 });
