@@ -2,6 +2,7 @@ import os
 
 from flask import Flask, g
 from flask_login import LoginManager
+from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 
@@ -11,6 +12,7 @@ db = SQLAlchemy()
 csrf = CSRFProtect()
 fn = FlaskNext()
 login_manager = LoginManager()
+migrate = Migrate()
 
 
 def create_app():
@@ -27,8 +29,8 @@ def create_app():
         f"""sqlite:///{os.path.join(_app.root_path, "test.db")}?check_same_thread=False""",
     )
     fn.init_app(_app)
-    fn.print()
     db.init_app(_app)
+    migrate.init_app(_app, db)
     csrf.init_app(_app)
     login_manager.init_app(_app)
     login_manager.login_view = "routes.index.get_post_login"
