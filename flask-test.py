@@ -35,8 +35,7 @@ class TestRoutes(ClientTestCase):
         for route in [
             ("/hello", "Hello there"),
             ("/hello/html", "This is html"),
-            ("/", "Flask_next Index Page"),
-            ("/login", "Login"),
+            ("/", """<div id="jsx_content"></div>"""),
             ("/test", "Farewell"),
             (f"/test/flong/{random_string(1)}", random_string(1)),
             (f"/test/integer/{random_int(2)}", f"{random_int(2) + 100}"),
@@ -45,4 +44,4 @@ class TestRoutes(ClientTestCase):
         ]:
             rv = client.get(route[0])
             self.assertEqual(200, rv.status_code, route)
-            self.assertIn(route[1], rv.data.decode("utf-8"))
+            self.assertIn(route[1], rv.data.decode("utf-8"), route[0])

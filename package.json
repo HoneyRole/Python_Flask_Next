@@ -1,0 +1,57 @@
+{
+  "name": "flask-next",
+  "version": "1.0.0",
+  "description": "Babel==2.6.0\r click==6.7\r easydict==1.7\r Flask==1.0.2\r Flask-Babel2==0.1\r itsdangerous==0.24\r Jinja2==2.10\r MarkupSafe==1.0\r pytz==2018.5\r speaklater==1.3\r Werkzeug==0.14.1",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "bootstrap-input-react": "^1.1.9",
+    "classnames": "^2.2.6",
+    "draft-js": "^0.11.7",
+    "informed": "^2.11.9",
+    "lodash": "^4.17.20",
+    "material-table": "^1.51.0",
+    "react": "^16.13.1",
+    "react-bootstrap": "^1.6.0",
+    "react-collapsible": "^2.8.0",
+    "react-confirm-alert": "^2.7.0",
+    "react-dom": "^16.13.1",
+    "react-hot-toast": "^2.0.0",
+    "react-inline-confirm": "^3.0.0",
+    "react-tabs": "^3.2.2",
+    "react-use": "^17.2.4",
+    "serialize-javascript": "^3.1.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.12.16",
+    "@babel/core": "^7.8.4",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/plugin-transform-modules-commonjs": "^7.6.0",
+    "@babel/preset-env": "^7.8.4",
+    "@babel/preset-react": "^7.8.3",
+    "babel-loader": "^8.0.6",
+    "babel-preset-react-app": "^3.1.2",
+    "css-loader": "^3.5.2",
+    "join-path": "^1.1.1",
+    "jquery": "^3.5.0",
+    "json-form-data": "^1.5.0",
+    "prismjs": "^1.20.0",
+    "prop-types": "^15.7.2",
+    "react-router-dom": "^5.2.0",
+    "react-select": "^3.2.0",
+    "react-table": "^6.10.3",
+    "style-loader": "^1.0.0",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.9",
+    "webpack-glob-entry": "^2.1.1"
+  },
+  "scripts": {
+    "babel-watch": "webpack -p --watch --progress  --mode development --env.development --config webpack.config.js --env.NODE_ENV=development",
+    "build": "webpack -p --progress --config webpack.config.js"
+  },
+  "keywords": [],
+  "author": "Andrew Rowe",
+  "license": "ISC"
+}

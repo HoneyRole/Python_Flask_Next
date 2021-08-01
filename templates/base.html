@@ -36,7 +36,7 @@
 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 <script>
     window.g_json =
-    {{ g_json or {} |  tojson }}
+    {{ g_json  | tojson | safe }}
 </script>
 {{ html | safe }}
 {% block body %}{% endblock %}

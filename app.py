@@ -28,7 +28,7 @@ def create_app():
         "SQLALCHEMY_DATABASE_URI",
         f"""sqlite:///{os.path.join(_app.root_path, "test.db")}?check_same_thread=False""",
     )
-    fn.init_app(_app)
+    fn.init_app(_app, "./routes")
     db.init_app(_app)
     migrate.init_app(_app, db)
     csrf.init_app(_app)

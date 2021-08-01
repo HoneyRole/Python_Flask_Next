@@ -1,11 +1,14 @@
 import os
+from pathlib import Path
 from random import randint
 from urllib.parse import quote_plus
 
-from flask import Flask, request, current_app, redirect
+from flask import Flask, request, current_app, redirect, g
 from flask_login import current_user
 
 from flask_next.DynamicSetup import DynamicSetup
+from flask_next.d_serialize import d_serialize
+from flask_next.utils import get_g_json
 
 
 class FlaskNext:
@@ -17,10 +20,10 @@ class FlaskNext:
         if _app:
             self.init_app(_app)
 
-    def init_app(self, _app):
+    def init_app(self, _app, _routes_path:Path="./routes"):
         self.app = _app
         self._dynamic_setup.app = _app
-        self._dynamic_setup.spelunk()
+        self._dynamic_setup.spelunk(_routes_path)
 
         @self.app.before_request
         def secure_routes():
@@ -43,6 +46,10 @@ class FlaskNext:
                     )
                     return redirect(f"/?request_path={quote_plus(request.full_path)}")
             return e
+
+        @self.app.route('/g')
+        def route_get_g_json():
+            return get_g_json()
 
         @self.app.route("/last_static_update")
         def public_last_static_update():

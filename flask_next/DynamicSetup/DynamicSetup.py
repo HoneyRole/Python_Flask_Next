@@ -13,6 +13,7 @@ class DynamicSetup:
     secure_routes = {}
     public_routes = {}
     route_count: int = 0
+    option_append_slash = False
     allowable_methods = ["GET", "PUT", "POST", "DELETE"]
 
     def __init__(self, _app: Flask = None):
@@ -68,6 +69,7 @@ class DynamicSetup:
                                 )
                         rule_url += f"/<{param_type}{param.name}>"
 
+                    rule_url = self.fix_url(rule_url)
                     self.app.logger.info(
                         f"{method_name}: add_url_rule: {rule_url} {methods}"
                     )
@@ -84,8 +86,17 @@ class DynamicSetup:
                         self.public_routes[endpoint] = rule_url
                     self.route_count += 1
 
+    def fix_url(self, rule_url):
+        while '//' in rule_url:
+            rule_url = rule_url.replace('//', '/')
+        if self.option_append_slash:
+            if not rule_url.endswith('/'):
+                rule_url += '/'
+        return rule_url
+
     def add_html(self, route_path: Path, rule_url: str):
         endpoint = ".".join(route_path.parts)
+        rule_url = self.fix_url(rule_url)
         self.app.add_url_rule(
             rule_url,
             view_func=HTMLView.as_view(endpoint, route_path),
@@ -98,8 +109,8 @@ class DynamicSetup:
         else:
             self.public_routes[endpoint] = rule_url
 
-    def spelunk(self):
-        for d in glob.glob("./routes/**/[!_]*", recursive=True):
+    def spelunk(self, routes_path):
+        for d in glob.glob(f"{routes_path}/**/[!_]*", recursive=True):
             route_path = Path(d)
             suffix = route_path.suffix.lower()
             if route_path.is_file() and suffix in [".html", ".py"]:
