@@ -1,3 +1,4 @@
+import os
 import string
 from random import randint, choices
 
@@ -27,7 +28,11 @@ def random_string(item_id=1):
 
 class TestRoutes(ClientTestCase):
     # Assign the flask app object
-    app = create_app()
+
+    app = create_app("./routes")
+    app.config['TESTING'] = True
+    app.config['SECRET_KEY'] = 'Testing'
+    app.config['WTF_CSRF_ENABLED'] = False
 
     def test_dynamic_routes_with_client(self, client):
         # Use the client here

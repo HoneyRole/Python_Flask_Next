@@ -1,7 +1,7 @@
-import React from "react";
+import React, {useEffect} from "react";
 import ReactDOM from 'react-dom'
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
-import {AppContext, useContextState} from './context'
+import {AppContext, ContextErrorMessage, ContextMessage, useContextState} from './context'
 
 import Home from "./Home";
 import {Navigation} from "./Navigation";
@@ -10,9 +10,14 @@ import {Login} from "./auth/Login";
 
 export function Index() {
     const contextState = useContextState();
+
+    useEffect(() => $.getJSON('/g').then(g => window.g_json = g), []);
+
     return (<AppContext.Provider value={contextState}>
         <Router>
             <Navigation/>
+            <ContextMessage message={contextState.message}/>
+            <ContextErrorMessage message={contextState.errorMessage}/>
             <div className={"container-fluid"}>
                 <Switch>
                     <Route exact path="/">

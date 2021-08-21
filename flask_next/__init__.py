@@ -1,9 +1,8 @@
 import os
-from pathlib import Path
 from random import randint
 from urllib.parse import quote_plus
 
-from flask import Flask, request, current_app, redirect, g
+from flask import Flask, request, current_app, redirect
 from flask_login import current_user
 
 from flask_next.DynamicSetup import DynamicSetup
@@ -20,7 +19,7 @@ class FlaskNext:
         if _app:
             self.init_app(_app)
 
-    def init_app(self, _app, _routes_path:Path="./routes"):
+    def init_app(self, _app, _routes_path: str = "./routes"):
         self.app = _app
         self._dynamic_setup.app = _app
         self._dynamic_setup.spelunk(_routes_path)
@@ -39,12 +38,14 @@ class FlaskNext:
             that is read by the react router on init.
 
             """
-            if "/api/" not in request.path and request.method == "GET":
-                if "routes.index.html" in self._dynamic_setup.public_routes:
-                    current_app.logger.warning(
-                        f"""{404}, /?request_path={request.path}"""
-                    )
-                    return redirect(f"/?request_path={quote_plus(request.full_path)}")
+            if request.method == "GET":
+                arg_parts = request.path.split('/')
+                if "api" not in arg_parts:
+                    if "routes.index.html" in self._dynamic_setup.public_routes:
+                        current_app.logger.warning(
+                            f"""{404}, /?request_path={request.path}"""
+                        )
+                        return redirect(f"/?request_path={quote_plus(request.full_path)}")
             return e
 
         @self.app.route('/g')

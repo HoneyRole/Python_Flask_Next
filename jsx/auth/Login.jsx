@@ -12,14 +12,18 @@ export function Login(props) {
 
     function handleSubmit(event) {
         event.preventDefault();
-        const csrf_token = $("input[name=base-csrf_token]").val();
+        const csrf_token = $("input[name=csrf_token]").val();
         const data = {csrf_token, ...Object.fromEntries(new FormData(event.target))};
         return $.ajax({
-                url: `/api/login/${data.username}`,
+                url: `/api/login`,
                 type: 'POST',
                 data: data
             }
-        ).then( result=> $.getJSON('/g').then(g=>window.g_json = g)
+        ).then(result => {
+                $.getJSON('/g').then(g => window.g_json = g
+                );
+                history.push('/');
+            }
         ).fail((xhr, textStatus, errorThrown) =>
             context.setErrorMessage(`Error login: ${xhr.responseText} - ${errorThrown}`))
     }

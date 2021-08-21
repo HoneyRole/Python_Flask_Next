@@ -2,31 +2,21 @@ import React, {useContext, useState} from "react";
 import {useHistory} from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import {AppContext,} from "../context";
-import ProfileService from "../services/ProfileService";
 
 export function Logout(props) {
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const api = new ProfileService();
 
     const context = useContext(AppContext)
     const history = useHistory();
 
-    function validateForm() {
-        return email.length > 0 && password.length > 0;
-    }
-
     function clickLogout(event) {
         event.preventDefault();
-        api.logout(event, {}).then(result => {
-                context.setAnon(true);
-                context.setAdmin(false);
-                context.setUserId(null);
-                context.setMessage(result);
+        $.ajax.post('/api/logout').then(result => {
+                $.getJSON('/g').then(g => window.g_json = g)
                 history.push('/login');
             }
         ).fail((xhr, textStatus, errorThrown) =>
-            context.setErrorMessage(`Error login: ${xhr.responseText} - ${errorThrown}`))
+            context.setErrorMessage(`Error logout: ${xhr.responseText} - ${errorThrown}`))
     }
 
     return (

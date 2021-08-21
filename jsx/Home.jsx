@@ -1,5 +1,5 @@
-import React, {useContext, useEffect, useState} from "react";
-import {NavLink, useHistory} from "react-router-dom";
+import React, {useContext, useEffect} from "react";
+import {useHistory} from "react-router-dom";
 import {AppContext} from './context';
 import LoginRequired from "./LoginRequired";
 
@@ -18,13 +18,9 @@ export default function Home(props) {
         }
     }, []);
 
-    useEffect(() => {
-    }, [context.anon])
-
     if (!context.authenticated) {
         return <LoginRequired/>
     }
 
-    return (<div>Welcome to flask-next
-    </div>)
+    return <div>Welcome to flask-next</div>
 }

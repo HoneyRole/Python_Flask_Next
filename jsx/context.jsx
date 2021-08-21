@@ -40,8 +40,8 @@ function useStorage(key, initialValue = null) {
 export function useContextState() {
     const [message, setMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-    const [authenticated, setAuthenticated] = useState(window.g?.authenticated);
-    const [userId, setUserId] = useState(window.g?.user?.id);
+    const [authenticated, setAuthenticated] = useState(window.g_json?.authenticated);
+    const [userId, setUserId] = useState(window.g_json?.user?.id);
 
     return {
         message,

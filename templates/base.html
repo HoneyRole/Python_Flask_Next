@@ -21,13 +21,13 @@
         <section id="page_top" class="container">
             {% for category, message in messages %}
                 {% if message %}
-                <div class="flashed-message alert alert-{{ category if category not in ['temporary', 'message'] else 'info' }} flashed-message-{{ category }}"
-                     role="alert">
-                    <a href="#" title="close" class="close"
-                       aria-label="Close"
-                       aria-hidden="true">&times;</a>
-                    <span class="flash-message">{{ message }}</span>
-                </div>
+                    <div class="flashed-message alert alert-{{ category if category not in ['temporary', 'message'] else 'info' }} flashed-message-{{ category }}"
+                         role="alert">
+                        <a href="#" title="close" class="close"
+                           aria-label="Close"
+                           aria-hidden="true">&times;</a>
+                        <span class="flash-message">{{ message }}</span>
+                    </div>
                 {% endif %}
             {% endfor %}
         </section>
@@ -36,7 +36,7 @@
 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 <script>
     window.g_json =
-    {{ g_json  | tojson | safe }}
+    {{ g_json | tojson | safe }}
 </script>
 {{ html | safe }}
 {% block body %}{% endblock %}

@@ -15,7 +15,7 @@ login_manager = LoginManager()
 migrate = Migrate()
 
 
-def create_app():
+def create_app(fn_route="./routes"):
     """
     create a flask app
 
@@ -28,7 +28,7 @@ def create_app():
         "SQLALCHEMY_DATABASE_URI",
         f"""sqlite:///{os.path.join(_app.root_path, "test.db")}?check_same_thread=False""",
     )
-    fn.init_app(_app, "./routes")
+    fn.init_app(_app, fn_route)
     db.init_app(_app)
     migrate.init_app(_app, db)
     csrf.init_app(_app)

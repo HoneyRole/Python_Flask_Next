@@ -4,6 +4,24 @@ from typing import Any, Callable
 from flask import request, abort, Response
 
 
+def get_request_value(arg_name:str, arg_type: Any = str, arg_default: Any = None) -> Any:
+    """
+    get a form or arg value from a Flask request object
+    """
+    arg_value = request.form.get(arg_name) or request.args.get(arg_name) or arg_default
+    if arg_value is not None:
+        try:
+            arg_value = arg_type(arg_value)
+        except Exception as e:
+            abort(
+                Response(
+                    f"""Required argument failed type conversion: {arg_name}, {str(e)}""",
+                    status=400,
+                )
+            )
+    return arg_value
+
+
 def request_arg(arg_name: str, arg_type: Any = str, arg_default=None) -> Callable:
     """
     decorator to auto convert arg or form fields to
@@ -28,21 +46,12 @@ def request_arg(arg_name: str, arg_type: Any = str, arg_default=None) -> Callabl
     def decorator(f):
         @wraps(f)
         def decorated(*args, **kwargs):
-            arg_value = request.form.get(arg_name) or request.args.get(arg_name) or arg_default
-            if arg_value is not None:
-                try:
-                    arg_value = arg_type(arg_value)
-                except Exception as e:
-                    abort(
-                        Response(
-                            f"""Required argument failed type conversion: {arg_name}, {str(e)}""",
-                            status=400,
-                        )
-                    )
+            value = get_request_value(arg_name, arg_type, arg_default)
+            if value is None:
+                abort(Response(f"""Required argument missing: {arg_name}""", status=400))
 
-                kwargs[arg_name] = arg_value
-                return f(*args, **kwargs)
-            abort(Response(f"""Required argument missing: {arg_name}""", status=400))
+            kwargs[arg_name] = value
+            return f(*args, **kwargs)
 
         return decorated
 
